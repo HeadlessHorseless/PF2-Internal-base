@@ -1,6 +1,3 @@
-# TF2Classic Internal Training Software
-
-### Big thanks to:
-Lak3\
-Spook953\
-StickOfficial
+# PF2 Internal Base
+This is a fork of TF2Classic Cheat converted to work as a PF2 Internal base\
+Some things might not work, if that's the case and you have a fix for it you can make a pull request
