@@ -76,7 +76,7 @@ void H::Initialize()
 	//WndProc
 	while (!WndProc::hwGame)
 	{
-		WndProc::hwGame = FindWindowW(nullptr, L"Team Fortress 2 Classic");
+		WndProc::hwGame = FindWindowW(nullptr, L"Pre-Fortress 2");
 		Sleep(100);
 	}
 
