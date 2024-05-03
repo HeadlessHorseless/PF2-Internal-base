@@ -132,21 +132,10 @@ void __stdcall H::PaintHook(int mode)
 		{
 			//Draw Here
 			if (!F::Menu.m_bOpen)
-				G::Draw.String(EFonts::DEBUG, 5, 5, { 204, 204, 204, 255 }, TXT_DEFAULT, L"Team Fortress 2: Classic");
+				G::Draw.String(EFonts::DEBUG, 5, 5, { 204, 204, 204, 255 }, TXT_DEFAULT, L"PF2 Internal Base");
 
 			F::ESP.Paint();
 			F::Menu.Run();
-
-			if (Vars::Aimbot::UseFOVRestrict.m_Var && Vars::Aimbot::AimFov.m_Var)
-			{
-				if (C_BaseEntity* pLocal = I::ClientEntityList->GetClientEntity(g_Globals.m_nLocalIndex)->GetBaseEntity())
-				{
-					float flFOV = static_cast<float>(Vars::Visuals::FieldOfView.m_Var);
-					float flR = tanf(DEG2RAD(Vars::Aimbot::AimFov.m_Var) / 2.0f)
-						/ tanf(DEG2RAD((pLocal->IsScoped() && !Vars::Visuals::RemoveZoom.m_Var) ? 30.0f : flFOV) / 2.0f) * g_Globals.m_nScreenWidht;
-					G::Draw.OutlinedCircle(g_Globals.m_nScreenWidht / 2, g_Globals.m_nScreenHeight / 2, flR, 68, {204, 204, 204, 255});
-				}
-			}
 		}
 		FinishDrawing(I::Surface);
 	}
