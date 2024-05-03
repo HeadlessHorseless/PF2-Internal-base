@@ -532,9 +532,9 @@ void CMenu::Run()
 		{
 			G::Draw.Rect(20, 25, 160, 5, Vars::Menu::Colors::TitleBar);
 			G::Draw.Rect(20, 30, 160, (G::Draw.m_Fonts[FONT_MENU].m_nTall * 3) + 5, Vars::Menu::Colors::WindowBackground);
-			G::Draw.String(FONT_MENU, 22, 32, Vars::Menu::Colors::Text, TXT_DEFAULT, "TF2 Classic");
+			G::Draw.String(FONT_MENU, 22, 32, Vars::Menu::Colors::Text, TXT_DEFAULT, "PF2 Internal Base");
 			G::Draw.String(FONT_MENU, 22, 32 + G::Draw.m_Fonts[FONT_MENU].m_nTall, Vars::Menu::Colors::Text, TXT_DEFAULT, "Build: " __DATE__);
-			G::Draw.String(FONT_MENU, 22, 32 + (G::Draw.m_Fonts[FONT_MENU].m_nTall * 2), Vars::Menu::Colors::Text, TXT_DEFAULT, "Developers: whydoihax");
+			G::Draw.String(FONT_MENU, 22, 32 + (G::Draw.m_Fonts[FONT_MENU].m_nTall * 2), Vars::Menu::Colors::Text, TXT_DEFAULT, "Meant for Devs");
 		}
 
 		//Do the Window
@@ -567,7 +567,7 @@ void CMenu::Run()
 				Vars::Menu::Position.y - (Vars::Menu::TitleBarH / 2),
 				Vars::Menu::Colors::Text,
 				TXT_CENTERXY,
-				"%ls", L"Team Fortress 2 Classic");
+				"%ls", L"PF2 Internal");
 		}
 
 		//Do the Widgets
