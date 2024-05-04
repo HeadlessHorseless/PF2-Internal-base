@@ -158,7 +158,7 @@ int CAimbot::GetBestHitbox(C_BaseEntity* pLocal, C_BaseEntity* pEntity)
 
 	if (!Vars::Aimbot::Hitbox.m_Var)
 	{
-		if (pLocal->m_iClass() == TF_CLASS_SNIPER)
+		if (pLocal->m_iClass() == CLASS_SNIPER)
 			iBestHitbox = 0;
 		else
 			iBestHitbox = 4;
