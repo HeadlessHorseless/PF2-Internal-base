@@ -174,19 +174,13 @@ public:
 
 	inline bool IsInvulnerable()
 	{
-		return InCond(TF_COND_INVULNERABLE)
-			|| InCond(TF_COND_INVULNERABLE_CARD_EFFECT)
-			|| InCond(TF_COND_INVULNERABLE_HIDE_UNLESS_DAMAGE)
-			|| InCond(TF_COND_INVULNERABLE_USER_BUFF)
-			|| InCond(TF_COND_PHASE);
+		return InCond(TF_COND_INVULNERABLE);
 	}
 
 	inline bool IsCloaked()
 	{
 		return InCond(TF_COND_STEALTHED)
-			|| InCond(TF_COND_STEALTHED_BLINK)
-			|| InCond(TF_COND_STEALTHED_USER_BUFF)
-			|| InCond(TF_COND_STEALTHED_USER_BUFF_FADING);
+			|| InCond(TF_COND_STEALTHED_BLINK);
 	}
 
 	inline bool IsScoped()
