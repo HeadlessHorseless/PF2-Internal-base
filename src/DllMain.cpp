@@ -4,6 +4,9 @@ DWORD WINAPI MainThread(LPVOID instance)
 {
 	G::Entry.Load();
 
+	//When the cheat gets injected we tell the console
+	I::EngineClient->ClientCmd_Unrestricted("echo Loaded!");
+
 	while (!GetAsyncKeyState(VK_F11))
 		Sleep(200);
 

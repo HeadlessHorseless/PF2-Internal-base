@@ -13,8 +13,9 @@ namespace Vars
 {
 	namespace Menu
 	{
+
 		inline Rect_t Position = { 100, 100, 800, 420 };
-		inline const auto Title = L"Team Fortress 2";
+		inline const auto Title = L"This is unused...";
 		inline int TitleBarH = 16;
 
 		inline int SpacingX = 8;
@@ -38,71 +39,23 @@ namespace Vars
 		inline int InputBoxH = 14;
 		inline int InputColorBoxW = 30;
 
-		namespace Colors
+		namespace Colors //Colors for the menu, feel free to edit
 		{
 			inline Color WindowBackground = { 20, 20, 20, 255 };
 			inline Color TitleBar = { 139, 0, 0, 255 };
 			inline Color Text = { 255, 255, 255, 190 };
 			inline Color Widget = { 20, 20, 20, 255 };
 			inline Color WidgetActive = { 70, 70, 70, 255 };
-			inline Color OutlineMenu = { 139, 0, 0, 20 };
+			inline Color OutlineMenu = { 60, 60, 60, 255 }; //I replaced this with the OutlineMenu Colors of Neuoanitic as it was too dark
 		}
 	}
 
-	namespace Aimbot
+	namespace ExampleVars
 	{
-		inline CVar<bool> Enabled{ true, L"Enabled" };
-		inline CVar<int> Hitbox{ 0, L"Hitbox Num" };
-		inline CVar<bool> Autoshoot{ true, L"Autoshoot" };
-		inline CVar<int> AimKey{ VK_SHIFT, L"Aim Key" };
-		inline CVar<bool> AimPlayer{ true, L"Aim Players" };
-		inline CVar<bool> AimBuildings{ true, L"Aim Buildings" };
-		inline CVar<bool> SilentAim{ true, L"Silent Aim" };
-		inline CVar<bool> IgnoreInvulnerable{ true, L"Ignore Invulnerable" };
-		inline CVar<bool> IgnoreCloaked{ true, L"Ignore Cloaked" };
-		inline CVar<bool> UseFOVRestrict{ true, L"Use Aim FOV"};
-		inline CVar<float> AimFov{ 15.f, L"FOV Amount"};
-	}
-
-	namespace ESP
-	{
-		inline CVar<bool> Enabled{ true, L"Enabled" };
-		inline CVar<bool> Outline{ false, L"Outline" };
-		inline CVar<bool> DrawHealthAndAmmo{ true, L"Draw Health and Ammo" };
-
-		namespace Players
-		{
-			inline CVar<bool> Enabled{ true, L"Enabled" };
-			inline CVar<bool> Teammates{ false, L"Draw Teammates" };
-			inline CVar<bool> Name{ true, L"Name Text" };
-			//inline CVar<bool> Class{ true, L"Class" };
-			inline CVar<bool> Health{ false, L"Health Text" };
-			inline CVar<bool> HealthBar{ true, L"Health Bar" };
-			inline CVar<int> Box{ 2, L"Box" };
-		}
-
-		namespace Buildings
-		{
-			inline CVar<bool> Enabled{ true, L"Enabled" };
-			inline CVar<bool> Type{ true, L"Building Type" };
-			inline CVar<bool> LocalTeam{ true, L"Draw Local Team" };
-			inline CVar<bool> Health{ true, L"Health Text" };
-			inline CVar<bool> HealthBar{ false, L"Health Bar" };
-			inline CVar<int> Box{ 0, L"Box" };
-		}
-	}
-
-	namespace Visuals
-	{
-		inline CVar<bool> ToolTips{ false, L"Menu tooltips" };
-		inline CVar<bool> RemoveScope{ true, L"Remove Scope" };
-		inline CVar<bool> RemoveZoom{ true, L"Remove Zoom" };
-		inline CVar<int> FieldOfView{ 110, L"Field Of View" };
-	}
-
-	namespace Misc
-	{
-		inline CVar<bool> Bunnyhop{ true, L"Bunnyhop" };
-		inline CVar<bool> NoSpread{ true, L"No Spread" };
+		inline CVar<bool> BoolCheckbox{ true, L"Checkbox Bool" };
+		inline CVar<int> Integer{ 0, L"Integer" };
+		inline CVar<float> Float{ 0.0f, L"Float" };
+		inline CVar<int> Key{ VK_SHIFT, L"Key" }; //For Keybinds
+		inline CVar<int> ComboboxInt{ 0, L"Combobox" };
 	}
 }

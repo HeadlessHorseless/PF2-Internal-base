@@ -1,10 +1,5 @@
 #include "Hooks.h"
-#include "../Features/Misc/Misc.h"
-#include "../Features/ESP/ESP.h"
-#include "../Features/Aimbot/Aimbot.h"
 #include "../Features/Menu/Menu.h"
-#include "../Features/Visuals/Visuals.h"
-#include "../Features/NoSpread/NoSpread.h"
 
 void H::Initialize()
 {
@@ -104,13 +99,10 @@ bool __stdcall H::CreateMoveHook(float frameTime, CUserCmd* cmd)
 
 	if (pLocal && !pLocal->IsDormant() && pLocal->IsAlive())
 	{
-		if (Vars::Misc::Bunnyhop.m_Var)
-			F::Misc.Bunnyhop(pLocal, cmd);
+		//============================================================
+		//Everything you want to run in game should be called here
+		//============================================================
 
-		F::Aimbot.Run(pLocal, cmd);
-
-		// NoSpread patched :(
-		//F::Nospread.Think(cmd);
 	}
 
 	return false;
@@ -127,6 +119,9 @@ void __stdcall H::PaintHook(int mode)
 	{
 		G::Draw.ReloadMatrix();
 
+		//============================================================
+		//Everything that gets drawn on the screen should be called here
+		//============================================================
 		//Start Drawing
 		StartDrawing(I::Surface);
 		{
@@ -134,7 +129,6 @@ void __stdcall H::PaintHook(int mode)
 			if (!F::Menu.m_bOpen)
 				G::Draw.String(EFonts::DEBUG, 5, 5, { 204, 204, 204, 255 }, TXT_DEFAULT, L"PF2 Internal Base");
 
-			F::ESP.Paint();
 			F::Menu.Run();
 		}
 		FinishDrawing(I::Surface);
@@ -147,25 +141,25 @@ void __stdcall H::PostEntityHook()
 
 	g_Globals.m_nLocalIndex = I::EngineClient->GetLocalPlayer();
 
-	F::ESP.m_vecAmmo.clear();
-	{
-		F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_large.mdl"));
-		F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_large_bday.mdl"));
-		F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_medium.mdl"));
-		F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_medium_bday.mdl"));
-		F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_small.mdl"));
-		F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_small_bday.mdl"));
-	}
+	//F::ESP.m_vecAmmo.clear();
+	//{
+	//	F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_large.mdl"));
+	//	F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_large_bday.mdl"));
+	//	F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_medium.mdl"));
+	//	F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_medium_bday.mdl"));
+	//	F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_small.mdl"));
+	//	F::ESP.m_vecAmmo.push_back(I::ModelInfo->GetModelIndex("models/items/ammopack_small_bday.mdl"));
+	//}
 
-	F::ESP.m_vecHealth.clear();
-	{
-		F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_large.mdl"));
-		F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_large_bday.mdl"));
-		F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_medium.mdl"));
-		F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_medium_bday.mdl"));
-		F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_small.mdl"));
-		F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_small_bday.mdl"));
-	}
+	//F::ESP.m_vecHealth.clear();
+	//{
+	//	F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_large.mdl"));
+	//	F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_large_bday.mdl"));
+	//	F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_medium.mdl"));
+	//	F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_medium_bday.mdl"));
+	//	F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_small.mdl"));
+	//	F::ESP.m_vecHealth.push_back(I::ModelInfo->GetModelIndex("models/items/medkit_small_bday.mdl"));
+	//}
 }
 
 void __stdcall H::LevelShutdownHook()
@@ -204,8 +198,8 @@ void __stdcall H::FrameStageNotifyHook(ClientFrameStage_t frameStage)
 
 void __stdcall H::PaintPanelHook(VPANEL vguiPanel, bool force_repaint, bool allow_force)
 {
-	if (Vars::Visuals::RemoveScope.m_Var && !strcmp("HudScope", I::Panel->GetName(vguiPanel)))
-		return;
+	//if (Vars::Visuals::RemoveScope.m_Var && !strcmp("HudScope", I::Panel->GetName(vguiPanel)))
+		//return;
 
 	PaintPanelOriginal(I::Panel, vguiPanel, force_repaint, allow_force);
 }
@@ -228,8 +222,8 @@ bool __stdcall H::SDVM_Hook()
 	C_BaseEntity* pLocal = static_cast<C_BaseEntity*>(I::ClientEntityList->GetClientEntity(g_Globals.m_nLocalIndex));
 	if (pLocal && !pLocal->IsDormant() && pLocal->IsAlive())
 	{
-		if (pLocal->IsScoped() && Vars::Visuals::RemoveScope.m_Var && Vars::Visuals::RemoveZoom.m_Var)
-			return true;
+		//if (pLocal->IsScoped() && Vars::Visuals::RemoveScope.m_Var && Vars::Visuals::RemoveZoom.m_Var)
+			//return true;
 	}
 
 	return SDVM_Original(I::ClientMode);
@@ -238,7 +232,6 @@ bool __stdcall H::SDVM_Hook()
 void __stdcall H::OverrideViewHook(CViewSetup* pSetup)
 {
 	OverrideViewOriginal(I::ClientMode, pSetup);
-	F::Visuals.FOV(pSetup);
 }
 
 LRESULT CALLBACK H::WndProc::Detour(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

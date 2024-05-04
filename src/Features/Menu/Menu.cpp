@@ -4,7 +4,7 @@
 
 void CMenu::DrawTooltip()
 {
-	if (m_szCurTip.empty() || !Vars::Visuals::ToolTips.m_Var)
+	if (m_szCurTip.empty())
 		return;
 
 	int w, h;
@@ -548,6 +548,8 @@ void CMenu::Run()
 				Vars::Menu::TitleBarH,
 				Vars::Menu::TitleBarH);
 
+
+			//The menu is created and drawn here
 			G::Draw.Rect(
 				Vars::Menu::Position.x,
 				Vars::Menu::Position.y,
@@ -567,7 +569,7 @@ void CMenu::Run()
 				Vars::Menu::Position.y - (Vars::Menu::TitleBarH / 2),
 				Vars::Menu::Colors::Text,
 				TXT_CENTERXY,
-				"%ls", L"PF2 Internal");
+				"%ls", L"Your menu name goes here");
 		}
 
 		//Do the Widgets
@@ -575,70 +577,44 @@ void CMenu::Run()
 			m_LastWidget = { Vars::Menu::Position.x, Vars::Menu::Position.y + Vars::Menu::SpacingY, 0, 0 };
 			Rect_t checkpoint = m_LastWidget;
 
-			GroupBoxStart();
-			{
-				CheckBox(Vars::Aimbot::Enabled, L"Main Aimbot Switch");
-				//no one cares about hitbox customization
-				CheckBox(Vars::Aimbot::Autoshoot, L"Should aimbot automaticly shoot players?");
-				InputKey(Vars::Aimbot::AimKey, false);
-				CheckBox(Vars::Aimbot::UseFOVRestrict, L"Should we restrict aimbot to specific fov?");
-				InputFloat(Vars::Aimbot::AimFov, 1.0f, 180.0f, 1.0f, L"%.0f");
-				CheckBox(Vars::Aimbot::AimPlayer, L"Should we aim at players");
-				CheckBox(Vars::Aimbot::AimBuildings, L"Should we aim at buildings");
-				CheckBox(Vars::Aimbot::SilentAim, L"Should we enable silent aimbot?");
-				CheckBox(Vars::Aimbot::IgnoreInvulnerable, L"Ignore Invulnerable Players?");
-				CheckBox(Vars::Aimbot::IgnoreCloaked, L"Should we ignore cloaked spys?");
-			}
-			GroupBoxEnd(L"Aimbot", 180);
+			//Push things slightly to the right as the groupbox get slightly cut off if we don't do this
+			checkpoint.x += 5 + Vars::Menu::SpacingX;
+			m_LastWidget = checkpoint;
 
 			GroupBoxStart();
 			{
-				CheckBox(Vars::ESP::Enabled, L"Main ESP Switch");
-				CheckBox(Vars::ESP::Outline, L"Drawing outline switch");
-				CheckBox(Vars::ESP::DrawHealthAndAmmo, L"Should we draw text to label health and ammo packs?");
+				CheckBox(Vars::ExampleVars::BoolCheckbox, L"Tooltip for Checkbox");
+				InputKey(Vars::ExampleVars::Key, false);
+				InputFloat(Vars::ExampleVars::Float, 1.0f, 180.0f, 1.0f, L"%.0f");
+				InputInt(Vars::ExampleVars::Integer, -123, 123, 1);
+				ComboBox(Vars::ExampleVars::ComboboxInt, { {0, L"First"}, {1, L"Second"}, {2, L"Third"}, {3, L"And so forth.."} });
+				
+				//Buttons, unlike every other widget are not controlled by Vars
+				if (Button(L"Button", false, Vars::Menu::ButtonW, Vars::Menu::ButtonH))
+				{
+					I::EngineClient->ClientCmd_Unrestricted("echo Hello World");
+				}
 			}
-			GroupBoxEnd(L"ESP", 180);
+			GroupBoxEnd(L"Groupbox 1", 180);
 
-			GroupBoxStart();
-			{
-				CheckBox(Vars::ESP::Players::Enabled, L"Player ESP Switch");
-				CheckBox(Vars::ESP::Players::Teammates, L"Should we ignore the local team?");
-				CheckBox(Vars::ESP::Players::Name, L"Should we draw player name text?");
-				CheckBox(Vars::ESP::Players::Health, L"Should we draw health text?");
-				CheckBox(Vars::ESP::Players::HealthBar, L"Should we draw a bar to show player health?");
-				ComboBox(Vars::ESP::Players::Box, { {0, L"Off"}, {1, L"Basic Box"}, {2, L"Corners Only"} });
-			}
-			GroupBoxEnd(L"Player ESP", 180);
-
+			//Everything after this will be moved to the right side of the menu
 			checkpoint.x += 180 + Vars::Menu::SpacingX;
 			m_LastWidget = checkpoint;
 
 			GroupBoxStart();
 			{
-				CheckBox(Vars::ESP::Buildings::Enabled, L"Building ESP Switch");
-				CheckBox(Vars::ESP::Buildings::Type, L"text to show what kind of building you are looking at");
-				CheckBox(Vars::ESP::Buildings::LocalTeam, L"Should we draw the local team?");
-				CheckBox(Vars::ESP::Buildings::Health, L"Text to show building health");
-				CheckBox(Vars::ESP::Buildings::HealthBar, L"Bar to show building health");
-				ComboBox(Vars::ESP::Buildings::Box, { {0, L"Off"}, {1, L"Basic Box"}, {2, L"Corners Only"} });
+				CheckBox(Vars::ExampleVars::BoolCheckbox, L"Tooltip for Checkbox");
+				InputKey(Vars::ExampleVars::Key, false);
+				InputFloat(Vars::ExampleVars::Float, 1.0f, 180.0f, 1.0f, L"%.0f");
+				InputInt(Vars::ExampleVars::Integer, -123, 123, 1);
+				ComboBox(Vars::ExampleVars::ComboboxInt, { {0, L"First"}, {1, L"Second"}, {2, L"Third"}, {3, L"And so forth.."} });
+				//Buttons, unlike every other widget are not controlled by Vars
+				if (Button(L"Button", false, Vars::Menu::ButtonW, Vars::Menu::ButtonH))
+				{
+					I::EngineClient->ClientCmd_Unrestricted("echo Hello World");
+				}
 			}
-			GroupBoxEnd(L"Building ESP", 180);
-
-			GroupBoxStart();
-			{
-				CheckBox(Vars::Visuals::ToolTips, L"Should we enable informational menu tooltips?");
-				CheckBox(Vars::Visuals::RemoveScope, L"Should we remove the sniper scope?");
-				CheckBox(Vars::Visuals::RemoveZoom, L"Should we remove sniper aim zooming?");
-				InputInt(Vars::Visuals::FieldOfView, 70, 140);
-			}
-			GroupBoxEnd(L"Visuals", 180);
-
-			GroupBoxStart();
-			{
-				CheckBox(Vars::Misc::Bunnyhop, L"Enable automatic bunnyhopping?");
-				CheckBox(Vars::Misc::NoSpread, L"Should we enable bullet/projectile nospread?");
-			}
-			GroupBoxEnd(L"Misc", 210);
+			GroupBoxEnd(L"Groupbox 2", 180);
 		}
 
 		DrawTooltip();
