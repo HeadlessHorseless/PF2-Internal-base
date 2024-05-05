@@ -166,6 +166,7 @@
     <ClInclude Include="src\Entry\Entry.h" />
     <ClInclude Include="src\Features\Menu\InputHelper\InputHelper.h" />
     <ClInclude Include="src\Features\Menu\Menu.h" />
+    <ClInclude Include="src\Features\Vars.h" />
     <ClInclude Include="src\Hooks\Hooks.h" />
     <ClInclude Include="src\SDK\DrawManager\DrawManager.h" />
     <ClInclude Include="src\SDK\Globals\Globals.h" />
