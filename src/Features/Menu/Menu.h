@@ -21,6 +21,8 @@ private:
 	void GroupBoxEnd(const wchar_t* Label, int Width);
 	void DrawTooltip();
 
+	bool String(const size_t& Font, const char* const str, const Color& clr);
+
 private:
 	bool m_bReopened = false;
 	std::wstring m_szCurTip = L"";

@@ -489,6 +489,26 @@ void CMenu::GroupBoxEnd(const wchar_t* Label, int Width)
 	m_LastGroupBox.h = h;
 }
 
+bool CMenu::String(const size_t& Font, const char* const str, const Color& clr)
+{
+	bool callback = false;
+
+	int x = m_LastWidget.x;
+	int y = m_LastWidget.y + m_LastWidget.h + Vars::Menu::SpacingY;
+	int w = 0;
+	int h = Vars::Menu::CheckBoxH;
+
+	G::Draw.String(Font, x + w + Vars::Menu::SpacingText, y + (h / 2), clr, TXT_CENTERY, str);
+	
+
+	m_LastWidget.x = x;
+	m_LastWidget.y = y;
+	m_LastWidget.w = w;
+	m_LastWidget.h = h;
+
+	return callback;
+}
+
 void CMenu::Run()
 {
 	m_bReopened = false;
@@ -574,47 +594,206 @@ void CMenu::Run()
 
 		//Do the Widgets
 		{
+
+			//All your tabs are defined here
+			//Usually they should be named TAB_<Feature>
+			enum struct EMainTabs { TAB_1, TAB_2, TAB_3, TAB_4, TAB_5, TAB_6, TAB_7 };
 			m_LastWidget = { Vars::Menu::Position.x, Vars::Menu::Position.y + Vars::Menu::SpacingY, 0, 0 };
+			
+
 			Rect_t checkpoint = m_LastWidget;
 
 			//Push things slightly to the right as the groupbox get slightly cut off if we don't do this
 			checkpoint.x += 5 + Vars::Menu::SpacingX;
 			m_LastWidget = checkpoint;
 
-			GroupBoxStart();
+			static EMainTabs Tab = EMainTabs::TAB_1; //Defines the default tab
 			{
-				CheckBox(Vars::ExampleVars::BoolCheckbox, L"Tooltip for Checkbox");
-				InputKey(Vars::ExampleVars::Key, false);
-				InputFloat(Vars::ExampleVars::Float, 1.0f, 180.0f, 1.0f, L"%.0f");
-				InputInt(Vars::ExampleVars::Integer, -123, 123, 1);
-				ComboBox(Vars::ExampleVars::ComboboxInt, { {0, L"First"}, {1, L"Second"}, {2, L"Third"}, {3, L"And so forth.."} });
-				
-				//Buttons, unlike every other widget are not controlled by Vars
-				if (Button(L"Button", false, Vars::Menu::ButtonW, Vars::Menu::ButtonH))
+				//===============================
+				//Button tabs
+				//This would normally be far simpler if it was positioned on the left side but oh well
+				Rect_t checkpoint_line = m_LastWidget;
+				checkpoint_line.x -= Vars::Menu::SpacingX;
+				checkpoint_line.y += Vars::Menu::ButtonHSmall + (2 * 2);
+				Rect_t checkpoint_move = m_LastWidget;
+				checkpoint_move.x -= 5;
+				m_LastWidget = checkpoint_move;
+
+				if (Button(L"Tab 1", Tab == EMainTabs::TAB_1, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
+					Tab = EMainTabs::TAB_1;
+
+				checkpoint_move.x += Vars::Menu::ButtonWSmall + 2;
+				m_LastWidget = checkpoint_move;
+
+				if (Button(L"Tab 2", Tab == EMainTabs::TAB_2, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
+					Tab = EMainTabs::TAB_2;
+
+				checkpoint_move.x += Vars::Menu::ButtonWSmall + 2;
+				m_LastWidget = checkpoint_move;
+
+
+				if (Button(L"Tab 3", Tab == EMainTabs::TAB_3, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
+					Tab = EMainTabs::TAB_3;
+
+				checkpoint_move.x += Vars::Menu::ButtonWSmall + 2;
+				m_LastWidget = checkpoint_move;
+
+				if (Button(L"Tab 4", Tab == EMainTabs::TAB_4, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
+					Tab = EMainTabs::TAB_4;
+
+				checkpoint_move.x += Vars::Menu::ButtonWSmall + 2;
+				m_LastWidget = checkpoint_move;
+
+				//New tabs are defined like this:
+				//	if (Button(L"TAB NAME", Tab == EMainTabs::TAB_xyz, Vars::Menu::ButtonWSmall, Vars::Menu::ButtonHSmall))
+				//	Tab = EMainTabs::TAB_xyz;
+				//
+				//	checkpoint_move.x += Vars::Menu::ButtonWSmall + 2;
+				//	m_LastWidget = checkpoint_move;
+
+
+				m_LastWidget = checkpoint_line;
+				G::Draw.Line(checkpoint_line.x, checkpoint_line.y, Vars::Menu::Position.x + Vars::Menu::Position.w - 1, checkpoint_line.y, Vars::Menu::Colors::OutlineMenu);
+				checkpoint_line.x += Vars::Menu::SpacingX;
+				checkpoint_line.y += Vars::Menu::SpacingY;
+				m_LastWidget = checkpoint_line;
+				//===============================
+
+				//Tabs are defined here
+
+				//They are done like this:
+
+				//case EMainTabs::<tab name here ie TAB_1>
+				//{
+				// Rect_t checkpoint = m_LastWidget //Resets checkpoint so it doesn't cause horrifying misalignments
+				// 
+				// Menu widgets are in between here
+				// 
+				// 
+				// break; //required since we are using case here
+				//}
+
+				switch (Tab)
 				{
-					I::EngineClient->ClientCmd_Unrestricted("echo Hello World");
+				case EMainTabs::TAB_1:
+				{
+					Rect_t checkpoint = m_LastWidget;
+					GroupBoxStart();
+					{
+						String(FONT_MENU, "Example String", Vars::Menu::Colors::Text);
+						CheckBox(Vars::ExampleVars::BoolCheckbox, L"Tooltip for Checkbox");
+						InputKey(Vars::ExampleVars::Key, false);
+						InputFloat(Vars::ExampleVars::Float, 1.0f, 180.0f, 1.0f, L"%.0f");
+						InputInt(Vars::ExampleVars::Integer, -123, 123, 1);
+						ComboBox(Vars::ExampleVars::ComboboxInt, { {0, L"First"}, {1, L"Second"}, {2, L"Third"}, {3, L"And so forth.."} });
+
+						//Buttons, unlike every other widget are not controlled by Vars
+						if (Button(L"Button", false, Vars::Menu::ButtonW, Vars::Menu::ButtonH))
+						{
+							I::EngineClient->ClientCmd_Unrestricted("echo Hello World");
+						}
+					}
+					GroupBoxEnd(L"Groupbox 1", 180);
+
+					//Everything after this will be moved to the right side of the menu
+					checkpoint.x += 180 + Vars::Menu::SpacingX;
+					m_LastWidget = checkpoint;
+
+					GroupBoxStart();
+					{
+						String(FONT_MENU, "Example String", Vars::Menu::Colors::Text);
+						CheckBox(Vars::ExampleVars::BoolCheckbox, L"Tooltip for Checkbox");
+						InputKey(Vars::ExampleVars::Key, false);
+						InputFloat(Vars::ExampleVars::Float, 1.0f, 180.0f, 1.0f, L"%.0f");
+						InputInt(Vars::ExampleVars::Integer, -123, 123, 1);
+						ComboBox(Vars::ExampleVars::ComboboxInt, { {0, L"First"}, {1, L"Second"}, {2, L"Third"}, {3, L"And so forth.."} });
+						//Buttons, unlike every other widget are not controlled by Vars
+						if (Button(L"Button", false, Vars::Menu::ButtonW, Vars::Menu::ButtonH))
+						{
+							I::EngineClient->ClientCmd_Unrestricted("echo Hello World");
+						}
+					}
+					GroupBoxEnd(L"Groupbox 2", 180);
+
+
+					break;
+				}
+				//Second tab
+				case EMainTabs::TAB_2:
+				{
+					Rect_t checkpoint = m_LastWidget;
+					GroupBoxStart();
+					{
+						String(FONT_MENU, "Example String", Vars::Menu::Colors::Text);
+						CheckBox(Vars::ExampleVars::BoolCheckbox, L"Tooltip for Checkbox");
+						InputKey(Vars::ExampleVars::Key, false);
+						InputFloat(Vars::ExampleVars::Float, 1.0f, 180.0f, 1.0f, L"%.0f");
+						InputInt(Vars::ExampleVars::Integer, -123, 123, 1);
+						ComboBox(Vars::ExampleVars::ComboboxInt, { {0, L"First"}, {1, L"Second"}, {2, L"Third"}, {3, L"And so forth.."} });
+
+						//Buttons, unlike every other widget are not controlled by Vars
+						if (Button(L"Button", false, Vars::Menu::ButtonW, Vars::Menu::ButtonH))
+						{
+							I::EngineClient->ClientCmd_Unrestricted("echo Hello World");
+						}
+					}
+					GroupBoxEnd(L"Groupbox 1", 180);
+
+					//Everything after this will be moved to the right side of the menu
+					checkpoint.x += 180 + Vars::Menu::SpacingX;
+					m_LastWidget = checkpoint;
+
+					GroupBoxStart();
+					{
+						String(FONT_MENU, "Example String", Vars::Menu::Colors::Text);
+						CheckBox(Vars::ExampleVars::BoolCheckbox, L"Tooltip for Checkbox");
+						InputKey(Vars::ExampleVars::Key, false);
+						InputFloat(Vars::ExampleVars::Float, 1.0f, 180.0f, 1.0f, L"%.0f");
+						InputInt(Vars::ExampleVars::Integer, -123, 123, 1);
+						ComboBox(Vars::ExampleVars::ComboboxInt, { {0, L"First"}, {1, L"Second"}, {2, L"Third"}, {3, L"And so forth.."} });
+						//Buttons, unlike every other widget are not controlled by Vars
+						if (Button(L"Button", false, Vars::Menu::ButtonW, Vars::Menu::ButtonH))
+						{
+							I::EngineClient->ClientCmd_Unrestricted("echo Hello World");
+						}
+					}
+					GroupBoxEnd(L"Groupbox 2", 180);
+					break;
+				}
+				case EMainTabs::TAB_3:
+				{
+					Rect_t checkpoint = m_LastWidget;
+					String(FONT_MENU, "Stuff can be added here", Vars::Menu::Colors::Text);
+					break;
+				}
+				case EMainTabs::TAB_4:
+				{
+					Rect_t checkpoint = m_LastWidget;
+					String(FONT_MENU, "Stuff can be added here", Vars::Menu::Colors::Text);
+					break;
+				}
+				case EMainTabs::TAB_5:
+				{
+					Rect_t checkpoint = m_LastWidget;
+					String(FONT_MENU, "Stuff can be added here", Vars::Menu::Colors::Text);
+					break;
+				}
+				case EMainTabs::TAB_6:
+				{
+					Rect_t checkpoint = m_LastWidget;
+					String(FONT_MENU, "Stuff can be added here", Vars::Menu::Colors::Text);
+					break;
+				}
+				default: //If we somehow get to an invalid tab we draw nothing
+				{
+					break;
+				}
 				}
 			}
-			GroupBoxEnd(L"Groupbox 1", 180);
 
-			//Everything after this will be moved to the right side of the menu
-			checkpoint.x += 180 + Vars::Menu::SpacingX;
-			m_LastWidget = checkpoint;
+			
 
-			GroupBoxStart();
-			{
-				CheckBox(Vars::ExampleVars::BoolCheckbox, L"Tooltip for Checkbox");
-				InputKey(Vars::ExampleVars::Key, false);
-				InputFloat(Vars::ExampleVars::Float, 1.0f, 180.0f, 1.0f, L"%.0f");
-				InputInt(Vars::ExampleVars::Integer, -123, 123, 1);
-				ComboBox(Vars::ExampleVars::ComboboxInt, { {0, L"First"}, {1, L"Second"}, {2, L"Third"}, {3, L"And so forth.."} });
-				//Buttons, unlike every other widget are not controlled by Vars
-				if (Button(L"Button", false, Vars::Menu::ButtonW, Vars::Menu::ButtonH))
-				{
-					I::EngineClient->ClientCmd_Unrestricted("echo Hello World");
-				}
-			}
-			GroupBoxEnd(L"Groupbox 2", 180);
+			
 		}
 
 		DrawTooltip();
